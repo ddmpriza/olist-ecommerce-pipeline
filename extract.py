@@ -2,7 +2,7 @@ import pandas as pd
 import kagglehub
 import sqlite3
 import os
-
+from prechecks import PreChecks
 
 # Download latest version
 path = kagglehub.dataset_download("olistbr/brazilian-ecommerce")
@@ -43,6 +43,9 @@ for table_name, file_name in files.items():
     # Logging message confirming successful table creation
     print(f"Success! Table '{table_name}' is ready.")
 
+df_customers = pd.read_sql("SELECT * FROM customers;", conn)
+checker = PreChecks(df_customers, "customers")
+checker.run_all(["customer_id"])
 
 # Close the database connection; release resources
 conn.close()
